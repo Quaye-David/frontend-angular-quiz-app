@@ -4,12 +4,11 @@ import { QuizDataService } from '../../core/services/quiz-data.service';
 import { QuizStateService } from '../../core/services/quiz-state.service';
 import { QuizCategory } from '../../core/models/quiz.model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { QuizHeaderComponent } from '../../shared/components/quiz-header.component';
 
 @Component({
   selector: 'app-start-menu',
   standalone: true,
-  imports: [CommonModule, QuizHeaderComponent],
+  imports: [CommonModule],
   templateUrl: './start-menu.component.html',
   styleUrl: './start-menu.component.css'
 })

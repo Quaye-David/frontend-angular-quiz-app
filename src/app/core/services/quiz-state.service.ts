@@ -46,7 +46,7 @@ export class QuizStateService {
       this._quizState.score = 0;
       this._quizState.isQuizCompleted = false;
       this.viewStateSubject.next(ViewState.QUIZ);
-      
+
       // Emit the new category
       this.selectedCategorySubject.next(category);
     } catch (error) {
@@ -56,5 +56,25 @@ export class QuizStateService {
 
   private calculateTotalQuestions(category: QuizCategory): number {
     return category.questions.length;
+  }
+
+  submitAnswer(answer: string): boolean {
+    const currentQuestion = this._quizState.currentCategory?.questions[this._quizState.currentQuestionIndex];
+    const isCorrect = currentQuestion?.answer === answer;
+
+    if (isCorrect) {
+      this._quizState.score++;
+    }
+
+    this._quizState.selectedAnswers[this._quizState.currentQuestionIndex] = answer;
+    return isCorrect;
+  }
+
+  nextQuestion(): void {
+    if (this._quizState.currentQuestionIndex < this._quizState.totalQuestions - 1) {
+      this._quizState.currentQuestionIndex++;
+    } else {
+      this._quizState.isQuizCompleted = true;
+    }
   }
 }

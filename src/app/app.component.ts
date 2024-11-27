@@ -19,13 +19,26 @@ import { Observable } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent implements OnInit {
   viewState$: Observable<ViewState>;
+  isDarkTheme = false;
 
   constructor(private readonly quizStateService: QuizStateService) {
     this.viewState$ = this.quizStateService.viewState$;
   }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
+  ngOnInit() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.isDarkTheme = true;
+      document.body.classList.add('dark-theme');
+    }
+  }
+
+  onThemeToggle(isDark: boolean) {
+    this.isDarkTheme = isDark;
+    document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }
 }

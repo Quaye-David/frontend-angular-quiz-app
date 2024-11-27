@@ -1,5 +1,5 @@
  // quiz-header.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuizStateService } from '../../core/services/quiz-state.service';
 import { QuizCategory } from '../../core/models/quiz.model';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   template: `
-  <header class="header">
+ <header class="header">
       <div class="quiz-info">
         @if (selectedQuiz) {
           <span class="quiz-icon"
@@ -23,8 +23,8 @@ import { Subscription } from 'rxjs';
       </div>
       <div class="theme-toggle" [class.dark]="isDarkTheme">
         <span class="theme-icon">🌞</span>
-        <button class="toggle-button">
-          <span class="toggle-slider" (click)="toggleTheme()"></span>
+        <button class="toggle-button" (click)="toggleTheme()">
+          <span class="toggle-slider"></span>
         </button>
         <span class="theme-icon">🌙</span>
       </div>
@@ -96,9 +96,12 @@ import { Subscription } from 'rxjs';
 
   `]
 })
+
 export class QuizHeaderComponent implements OnInit, OnDestroy {
+  @Input() isDarkTheme = false;
+  @Output() themeToggled = new EventEmitter<boolean>();
+
   selectedQuiz?: QuizCategory;
-  isDarkTheme = false;
   private subscription?: Subscription;
 
   constructor(
@@ -110,13 +113,6 @@ export class QuizHeaderComponent implements OnInit, OnDestroy {
     this.subscription = this.quizStateService.selectedCategory$.subscribe(
       quiz => this.selectedQuiz = quiz
     );
-
-    // Initialize theme from localStorage if exists
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      this.isDarkTheme = true;
-      document.body.classList.add('dark-theme');
-    }
   }
 
   ngOnDestroy() {
@@ -139,7 +135,6 @@ export class QuizHeaderComponent implements OnInit, OnDestroy {
 
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
-    document.body.classList.toggle('dark-theme');
-    localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
+    this.themeToggled.emit(this.isDarkTheme);
   }
 }
