@@ -10,11 +10,22 @@ export class QuizDataService {
 
   constructor() {}
 
+  private async loadSvgIcon(path: string): Promise<string> {
+    try {
+      const response = await fetch(path);
+      if (!response.ok) {
+        throw new QuizError(`Failed to load SVG icon: ${path}`, 'ICON_LOAD');
+      }
+      return await response.text();
+    } catch (error) {
+      console.error(`Error loading SVG: ${path}`, error);
+      return ''; // Return empty string as fallback
+    }
+  }
+
   async loadQuizData(): Promise<QuizCategory[]> {
     try {
-      // Fetch local JSON file
-      const response = await fetch('data.json'); // Ensure the path is correct
-
+      const response = await fetch('data.json');
       if (!response.ok) {
         throw new QuizError(
           `Failed to fetch quiz data. Status: ${response.status}`,
@@ -24,12 +35,18 @@ export class QuizDataService {
 
       const data = await response.json();
 
-      // Validate the loaded data
       if (!this.validateQuizData(data)) {
         throw new QuizError('Invalid quiz data structure', 'VALIDATION');
       }
 
-      this.quizData = data.quizzes;
+      // Load SVG content for each category
+      this.quizData = await Promise.all(
+        data.quizzes.map(async (category: QuizCategory) => ({
+          ...category,
+          icon: await this.loadSvgIcon(category.icon)
+        }))
+      );
+
       return this.quizData;
     } catch (error) {
       QuizErrorHandler.handleError(error);

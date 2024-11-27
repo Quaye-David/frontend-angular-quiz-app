@@ -1,7 +1,7 @@
 export class QuizError extends Error {
   constructor(
     public override message: string,
-    public type: 'DATA_LOAD' | 'VALIDATION' | 'STATE' = 'DATA_LOAD'
+    public type: 'DATA_LOAD' | 'VALIDATION' |'ICON_LOAD' | 'STATE' = 'DATA_LOAD'
   ) {
     super(message);
     this.name = 'QuizError';

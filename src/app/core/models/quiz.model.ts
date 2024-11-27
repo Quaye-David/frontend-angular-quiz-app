@@ -9,3 +9,9 @@ export interface QuizQuestion {
   options: string[];
   answer: string;
 }
+
+export interface QuizIcon {
+  type: string;
+  path: string;
+  content? : string;
+}

@@ -1,1 +1,145 @@
- 
+ // quiz-header.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { QuizStateService } from '../../core/services/quiz-state.service';
+import { QuizCategory } from '../../core/models/quiz.model';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-quiz-header',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+  <header class="header">
+      <div class="quiz-info">
+        @if (selectedQuiz) {
+          <span class="quiz-icon"
+                [innerHTML]="getSafeIcon(selectedQuiz.icon)"
+                [style.background-color]="getIconBackground(selectedQuiz.title)">
+          </span>
+          <span class="quiz-name">{{ selectedQuiz.title }}</span>
+        }
+      </div>
+      <div class="theme-toggle" [class.dark]="isDarkTheme">
+        <span class="theme-icon">🌞</span>
+        <button class="toggle-button">
+          <span class="toggle-slider" (click)="toggleTheme()"></span>
+        </button>
+        <span class="theme-icon">🌙</span>
+      </div>
+    </header>
+  `,
+  styles: [`
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 auto;
+      padding-inline: var(--spacing-l);
+      padding-block: var(--spacing-2xl);
+      max-width: 80%;
+    }
+    .quiz-info {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-s);
+    }
+    .quiz-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+    .quiz-name {
+      font-weight: 600;
+      color: var(--color-gray-700);
+    }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .toggle-button {
+      width: 48px;
+      height: 24px;
+      background: var(--color-purple);
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--color-white);
+      border-radius: 50%;
+      left: 2px;
+      top: 2px;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle.dark .toggle-slider {
+      transform: translateX(24px);
+    }
+
+  `]
+})
+export class QuizHeaderComponent implements OnInit, OnDestroy {
+  selectedQuiz?: QuizCategory;
+  isDarkTheme = false;
+  private subscription?: Subscription;
+
+  constructor(
+    private readonly quizStateService: QuizStateService,
+    private readonly sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit() {
+    this.subscription = this.quizStateService.selectedCategory$.subscribe(
+      quiz => this.selectedQuiz = quiz
+    );
+
+    // Initialize theme from localStorage if exists
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.isDarkTheme = true;
+      document.body.classList.add('dark-theme');
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
+
+  getSafeIcon(iconContent: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(iconContent);
+  }
+
+  getIconBackground(quizTitle: string): string {
+    const backgroundMap: { [key: string]: string } = {
+      'HTML': 'var(--icon-html)',
+      'CSS': 'var(--icon-css)',
+      'JavaScript': 'var(--icon-js)',
+      'Accessibility': 'var(--icon-accessibility)'
+    };
+    return backgroundMap[quizTitle] || 'transparent';
+  }
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
+  }
+}
