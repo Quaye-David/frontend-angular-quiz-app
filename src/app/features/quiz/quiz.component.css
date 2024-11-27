@@ -1,0 +1,103 @@
+/* quiz.component.css */
+.quiz-container {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: var(--spacing-l);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.question-number {
+  color: var(--color-grey-navy);
+  margin-bottom: var(--spacing-m);
+  font-style: italic;
+}
+
+.question-text {
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--fs-heading-m);
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.option-button {
+  font-size: var(--fs-body-m);
+  text-align: left;
+  padding: var(--spacing-m);
+  background: var(--color-white);
+  box-shadow: var(--shadow-default);
+  border-radius: 24px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.option-button:hover {
+  background: var(--color-purple);
+  color: var(--color-white);
+}
+
+.option-button.selected {
+  border-color: var(--color-purple);
+}
+
+.option-button.correct {
+  background-color: var(--color-green, #26d782);
+  color: var(--color-white);
+  border-color: var(--color-green, #26d782);
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+}
+
+.option-letter {
+  color: var(--color-grey-navy);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-heading-s);
+  text-align: center;
+  width: 60px;
+  height: 60px;
+  padding: var(--spacing-s);
+  border-radius: 8px;
+  background-color: var(--color-light-grey);
+}
+
+.option-button:hover .option-letter,
+.option-button.selected .option-letter,
+.option-button.correct .option-letter,
+.option-button.incorrect .option-letter {
+  color: var(--color-white);
+}
+
+.option-button.incorrect {
+  background-color: var(--color-warning);
+  color: var(--color-white);
+  border-color: var(--color-warning);
+}
+
+.action-button {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button,
+.next-button {
+  padding: var(--spacing-m) var(--spacing-xl);
+  background: var(--color-purple);
+  color: var(--color-white);
+  border: none;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

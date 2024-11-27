@@ -6,6 +6,8 @@
   max-width: 80%;
   margin: 0 auto;
   padding: var(--spacing-l);
+  align-items: start;
+  min-height: 100vh;
 }
 
 .welcome-section {
@@ -24,12 +26,9 @@
   font-size: var(--fs-body-m);
 }
 
-.quiz-list-section {
-  background: var(--color-white);
+/* .quiz-list-section {
   border-radius: var(--border-radius-container);
-  padding: var(--spacing-l);
-  box-shadow: var(--shadow-default);
-}
+} */
 
 .quiz-items {
   display: flex;
@@ -42,7 +41,7 @@
   align-items: center;
   gap: var(--spacing-m);
   padding: var(--spacing-m);
-  background: var(--color-light-grey);
+  background: var(--color-white);
   border: none;
   border-radius: var(--border-radius-button);
   cursor: pointer;
