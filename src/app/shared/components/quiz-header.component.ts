@@ -21,13 +21,14 @@ import { Subscription } from 'rxjs';
     <header class="header">
       <div class="quiz-info">
         @if (selectedQuiz) {
-        <span
-          class="quiz-icon"
-          [innerHTML]="getSafeIcon(selectedQuiz.icon)"
-          [style.background-color]="getIconBackground(selectedQuiz.title)"
-        >
-        </span>
-        <span class="quiz-name">{{ selectedQuiz.title }}</span>
+          <span
+            class="quiz-icon"
+            (click)="quitQuiz()"
+            [innerHTML]="getSafeIcon(selectedQuiz.icon)"
+            [style.background-color]="getIconBackground(selectedQuiz.title)"
+          >
+          </span>
+          <span class="quiz-name">{{ selectedQuiz.title }}</span>
         }
       </div>
       <div class="theme-toggle" [class.dark]="isDarkTheme">
@@ -46,8 +47,7 @@ import { Subscription } from 'rxjs';
         justify-content: space-between;
         align-items: center;
         margin: 0 auto;
-        padding-inline: var(--spacing-l);
-        padding-block: var(--spacing-2xl);
+        padding-block: var(--spacing-l);
         max-width: 80%;
       }
       .quiz-info {
@@ -104,9 +104,20 @@ import { Subscription } from 'rxjs';
       .theme-toggle.dark .toggle-slider {
         transform: translateX(20px);
       }
+
+      .back-button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+      }
+      .back-button:hover {
+        transform: scale(1.1);
+        transition: transform var(--transition-timing);
+      }
     `,
   ],
 })
+
 export class QuizHeaderComponent implements OnInit, OnDestroy {
   @Input() isDarkTheme = false;
   @Output() themeToggled = new EventEmitter<boolean>();
@@ -146,5 +157,11 @@ export class QuizHeaderComponent implements OnInit, OnDestroy {
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
     this.themeToggled.emit(this.isDarkTheme);
+  }
+
+  quitQuiz() {
+    if (confirm('Are you sure you want to quit the quiz?')) {
+      this.quizStateService.resetQuiz();
+    }
   }
 }

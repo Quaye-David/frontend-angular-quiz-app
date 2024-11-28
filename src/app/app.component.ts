@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { StartMenuComponent } from './features/start-menu/start-menu.component';
 import { QuizHeaderComponent } from './shared/components/quiz-header.component';
 import { QuizComponent } from './features/quiz/quiz.component';
+import { ResultsComponent } from './features/results/results.component';
 
 //Services
 import { QuizDataService } from './core/services/quiz-data.service';
@@ -14,7 +15,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, StartMenuComponent, QuizHeaderComponent, QuizComponent],
+  imports: [CommonModule, StartMenuComponent, QuizHeaderComponent, QuizComponent, ResultsComponent],
   providers: [QuizDataService, QuizStateService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

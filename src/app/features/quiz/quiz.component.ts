@@ -17,7 +17,7 @@ export class QuizComponent implements OnInit {
   totalQuestions = 0;
   selectedAnswer = '';
   isAnswerSubmitted = false;
-
+  errorMessage = "";
   constructor(private readonly quizStateService: QuizStateService) {}
 
   ngOnInit() {
@@ -34,15 +34,20 @@ export class QuizComponent implements OnInit {
   selectAnswer(answer: string) {
     if (!this.isAnswerSubmitted) {
       this.selectedAnswer = answer;
+      this.errorMessage = '';
     }
   }
 
   submitAnswer() {
-    if (this.selectedAnswer) {
-      this.isAnswerSubmitted = true;
-      this.quizStateService.submitAnswer(this.selectedAnswer);
+    if (!this.selectedAnswer) {
+      this.errorMessage = 'Please select an answer before submitting';
+      return;
     }
+    this.errorMessage = '';
+    this.isAnswerSubmitted = true;
+    this.quizStateService.submitAnswer(this.selectedAnswer);
   }
+
 
   nextQuestion() {
     this.quizStateService.nextQuestion();

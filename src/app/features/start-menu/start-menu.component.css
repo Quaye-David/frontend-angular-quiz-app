@@ -5,9 +5,8 @@
   gap: var(--spacing-xl);
   max-width: 80%;
   margin: 0 auto;
-  padding: var(--spacing-l);
   align-items: start;
-  min-height: 100vh;
+  min-height: 80vh;
 }
 
 .welcome-section {

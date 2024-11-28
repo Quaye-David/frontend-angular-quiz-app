@@ -8,7 +8,9 @@
       <h2 class="question-text">
         {{ currentQuiz.questions[currentQuestionIndex].question }}
       </h2>
-      <div class="progress-bar"></div>
+           <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="(currentQuestionIndex + 1) / totalQuestions * 100"></div>
+      </div>
     </div>
     <div class="options-list">
       @for (option of currentQuiz.questions[currentQuestionIndex].options; track $index) {
@@ -25,13 +27,18 @@
       </button>
       }
       <div class="action-button">
-      @if (!isAnswerSubmitted) {
-      <button class="submit-button" [disabled]="!selectedAnswer" (click)="submitAnswer()">
-        Submit Answer
-      </button>
-      } @else {
-      <button class="next-button" (click)="nextQuestion()">
-        {{ currentQuestionIndex === totalQuestions - 1 ? 'Finish Quiz' : 'Next Question' }}
+        @if (!isAnswerSubmitted) {
+          <div class="submit-section">
+            <button class="submit-button" (click)="submitAnswer()">
+              Submit Answer
+            </button>
+            @if (errorMessage) {
+              <p class="error-message">{{ errorMessage }}</p>
+            }
+          </div>
+        } @else {
+          <button class="next-button" (click)="nextQuestion()">
+            {{ currentQuestionIndex === totalQuestions - 1 ? 'Finish Quiz' : 'Next Question' }}
       </button>
       }
     </div>
