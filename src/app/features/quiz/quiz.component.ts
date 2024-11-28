@@ -27,6 +27,10 @@ export class QuizComponent implements OnInit {
     this.totalQuestions = state.totalQuestions;
   }
 
+  getProgress(): number {
+    return ((this.currentQuestionIndex + 1) / this.totalQuestions) * 100;
+  }
+
   selectAnswer(answer: string) {
     if (!this.isAnswerSubmitted) {
       this.selectedAnswer = answer;

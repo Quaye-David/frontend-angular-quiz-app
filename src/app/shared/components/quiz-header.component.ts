@@ -81,9 +81,9 @@ import { Subscription } from 'rxjs';
 
       .toggle-button {
         width: 48px;
-        height: 24px;
+        height: 28px;
         background: var(--color-purple);
-        border-radius: 12px;
+        border-radius: 20px;
         position: relative;
         cursor: pointer;
         border: none;
@@ -96,13 +96,13 @@ import { Subscription } from 'rxjs';
         height: 20px;
         background: var(--color-white);
         border-radius: 50%;
-        left: 2px;
-        top: 2px;
+        left: 4px;
+        top: 4px;
         transition: transform 0.3s ease;
       }
 
       .theme-toggle.dark .toggle-slider {
-        transform: translateX(24px);
+        transform: translateX(20px);
       }
     `,
   ],

@@ -5,6 +5,7 @@
   padding: var(--spacing-l);
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 10%;
 }
 
 .question-number {
@@ -16,6 +17,15 @@
 .question-text {
   margin-bottom: var(--spacing-xl);
   font-size: var(--fs-heading-m);
+}
+
+.progress-bar{
+  margin-bottom: var(--spacing-xl);
+  width: 100%;
+  height: 10px;
+  border-radius: 40px;
+  background-color: var(--color-grey-navy);
+
 }
 
 .options-list {
@@ -82,22 +92,31 @@
 }
 
 .action-button {
-  margin-top: var(--spacing-xl);
   display: flex;
   justify-content: center;
+  width: 100%;
+  text-align: left;
+  box-shadow: var(--shadow-default);
+  border-radius: 24px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: var(--color-purple);
+  padding: var(--spacing-m);
 }
 
 .submit-button,
 .next-button {
-  padding: var(--spacing-m) var(--spacing-xl);
-  background: var(--color-purple);
+  width: 100%;
+  height: 60px;
+display: none;
+  font-size: var(--fs-heading-s);
   color: var(--color-white);
   border: none;
   font-weight: var(--fw-medium);
   cursor: pointer;
 }
 
+
 .submit-button:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
 }
