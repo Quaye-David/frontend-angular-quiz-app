@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 //Components
 import { StartMenuComponent } from './features/start-menu/start-menu.component';
-import { QuizHeaderComponent } from './shared/components/quiz-header.component';
+import { QuizHeaderComponent } from './shared/quiz-header.component';
 import { QuizComponent } from './features/quiz/quiz.component';
 import { ResultsComponent } from './features/results/results.component';
 
@@ -11,35 +11,23 @@ import { ResultsComponent } from './features/results/results.component';
 import { QuizDataService } from './core/services/quiz-data.service';
 import { QuizStateService, ViewState } from './core/services/quiz-state.service';
 import { Observable } from 'rxjs';
+import { ThemeService } from './core/services/theme.service';
 
+// app.component.ts
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, StartMenuComponent, QuizHeaderComponent, QuizComponent, ResultsComponent],
-  providers: [QuizDataService, QuizStateService],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  providers: [QuizDataService, QuizStateService, ThemeService],
+  templateUrl:'./app.component.html'
 })
-
-export class AppComponent implements OnInit {
+export class AppComponent {
   viewState$: Observable<ViewState>;
-  isDarkTheme = false;
 
-  constructor(private readonly quizStateService: QuizStateService) {
+  constructor(
+    @Inject(QuizStateService) private readonly quizStateService: QuizStateService,
+    public readonly themeService: ThemeService
+  ) {
     this.viewState$ = this.quizStateService.viewState$;
-  }
-
-  ngOnInit() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      this.isDarkTheme = true;
-      document.body.classList.add('dark-theme');
-    }
-  }
-
-  onThemeToggle(isDark: boolean) {
-    this.isDarkTheme = isDark;
-    document.body.classList.toggle('dark-theme');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }
 }

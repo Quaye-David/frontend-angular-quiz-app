@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<!-- app.component.html -->
+
 <app-quiz-header
-  [isDarkTheme]="isDarkTheme"
-  (themeToggled)="onThemeToggle($event)">
+[isDarkTheme]="themeService.isDarkTheme"
+(themeToggled)="themeService.toggleTheme()">
 </app-quiz-header>
 <main class="app-container">
-  @switch (viewState$ | async) {
-    @case ('START_MENU') {
-      <app-start-menu></app-start-menu>
-    }
-    @case ('QUIZ') {
-      <app-quiz></app-quiz>
-    }
-    @case ('RESULT') {
-      <app-results></app-results>
-    }
-  }
+@switch (viewState$ | async) {
+  @case ('START_MENU') { <app-start-menu /> }
+  @case ('QUIZ') { <app-quiz /> }
+  @case ('RESULT') { <app-results /> }
+}
 </main>

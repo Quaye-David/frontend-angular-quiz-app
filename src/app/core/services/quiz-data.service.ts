@@ -2,51 +2,19 @@ import { Injectable } from '@angular/core';
 import { QuizCategory, QuizQuestion } from '../models/quiz.model';
 import { QuizError, QuizErrorHandler } from '../../utils/error-handler';
 
+// quiz-data.service.ts
 @Injectable({
   providedIn: 'root'
 })
 export class QuizDataService {
   private quizData: QuizCategory[] = [];
-
-  constructor() {}
-
-  private async loadSvgIcon(path: string): Promise<string> {
-    try {
-      const response = await fetch(path);
-      if (!response.ok) {
-        throw new QuizError(`Failed to load SVG icon: ${path}`, 'ICON_LOAD');
-      }
-      return await response.text();
-    } catch (error) {
-      console.error(`Error loading SVG: ${path}`, error);
-      return ''; // Return empty string as fallback
-    }
-  }
+  private readonly REQUIRED_FIELDS = ['title', 'icon', 'questions'] as const;
 
   async loadQuizData(): Promise<QuizCategory[]> {
     try {
-      const response = await fetch('data.json');
-      if (!response.ok) {
-        throw new QuizError(
-          `Failed to fetch quiz data. Status: ${response.status}`,
-          'DATA_LOAD'
-        );
-      }
-
-      const data = await response.json();
-
-      if (!this.validateQuizData(data)) {
-        throw new QuizError('Invalid quiz data structure', 'VALIDATION');
-      }
-
-      // Load SVG content for each category
-      this.quizData = await Promise.all(
-        data.quizzes.map(async (category: QuizCategory) => ({
-          ...category,
-          icon: await this.loadSvgIcon(category.icon)
-        }))
-      );
-
+      const data = await this.fetchData();
+      this.validateData(data);
+      this.quizData = data.quizzes;
       return this.quizData;
     } catch (error) {
       QuizErrorHandler.handleError(error);
@@ -54,48 +22,55 @@ export class QuizDataService {
     }
   }
 
-  private validateQuizData(data: any): boolean {
-    // Comprehensive data validation
-    if (!data?.quizzes || !Array.isArray(data.quizzes)) {
-      return false;
+  private async fetchData(): Promise<any> {
+    const response = await fetch('data.json');
+    if (!response.ok) {
+      throw new QuizError(`Failed to fetch quiz data. Status: ${response.status}`, 'DATA_LOAD');
     }
-
-    return data.quizzes.every((category: QuizCategory) => this.validateCategory(category));
+    return response.json();
   }
 
-  private validateCategory(category: QuizCategory): boolean {
-    // Check category structure
-    if (!category.title || !category.icon || !category.questions) {
-      return false;
+  private validateData(data: any): void {
+    if (!data?.quizzes?.length) {
+      throw new QuizError('Invalid quiz data structure', 'VALIDATION');
     }
 
-    return category.questions.every((question: QuizQuestion) => this.validateQuestion(question));
+    data.quizzes.forEach((category: QuizCategory, index: number) => {
+      this.validateFields(category, index);
+      this.validateQuestions(category.questions, category.title);
+    });
   }
 
-  private validateQuestion(question: QuizQuestion): boolean {
-    // Detailed question validation
-    return (
-      typeof question.question === 'string' && question.question.trim() !== '' &&
-      question.options &&
+  private validateFields(category: QuizCategory, index: number): void {
+    this.REQUIRED_FIELDS.forEach(field => {
+      if (!category[field]) {
+        throw new QuizError(`Missing ${field} in category ${index}`, 'VALIDATION');
+      }
+    });
+  }
+
+  private validateQuestions(questions: QuizQuestion[], categoryTitle: string): void {
+    questions.forEach((question, index) => {
+      if (!this.isValidQuestion(question)) {
+        throw new QuizError(
+          `Invalid question ${index} in category ${categoryTitle}`,
+          'VALIDATION'
+        );
+      }
+    });
+  }
+
+  private isValidQuestion(question: QuizQuestion): boolean {
+    return Boolean(
+      question.question?.trim() &&
       Array.isArray(question.options) &&
       question.options.length > 1 &&
-      typeof question.answer === 'string' && question.answer.trim() !== '' &&
+      question.answer?.trim() &&
       question.options.includes(question.answer)
     );
   }
 
-  // Getter methods
-  getCategories(): QuizCategory[] {
-    return this.quizData;
-  }
-
   getCategoryByName(title: string): QuizCategory | undefined {
-    return this.quizData.find(
-      category => category.title === title
-    );
-  }
-
-  getTotalQuestions(category: QuizCategory): number {
-    return category.questions.length;
+    return this.quizData.find(category => category.title === title);
   }
 }

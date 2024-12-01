@@ -1,6 +1,7 @@
 :root {
   /* Colors */
   --color-purple: #A729F5;
+  --color-purple-light: #d394fa;
   --color-dark-navy: #313E51;
   --color-navy: #3B4D66;
   --color-grey-navy: #626C7F;
@@ -17,11 +18,12 @@
   --font-family-primary: 'Rubik', sans-serif;
 
   /* Font Sizes */
-  --fs-heading-l: 2.75rem; /* 44px */
-  --fs-heading-m: 2rem; /* 32px */
-  --fs-heading-s: 1.75rem; /* 28px */
-  --fs-body-m: 1.25rem; /* 20px */
-  --fs-body-s: 1rem; /* 16px */
+  --fs-heading-xl: 144px;
+  --fs-heading-l: 64px;
+  --fs-heading-m: 36px;
+  --fs-heading-s: 28px; /* 28px */
+  --fs-body-m: 20px; /* 20px */
+  --fs-body-s: 20px; /* 16px */
 
   /* Font Weights */
   --fw-light: 300;
@@ -82,7 +84,7 @@ body {
   background-color: var(--color-light-grey);
   line-height: 1.5;
   position: relative;
-  min-height: 100vh;
+  max-height: 100vh;
   overflow-x: hidden;
   transition: background-color var(--transition-timing);
 }
@@ -113,10 +115,17 @@ body::after {
   transition: opacity var(--transition-timing);
 }
 
+
+@media (max-width: 1028px) {
+  body::after {
+    display: none;
+  }
+}
+
 /* Dark theme ellipse modifications */
 .dark-theme::before,
 .dark-theme::after {
-  opacity: 0.1;
+  filter: brightness(0) saturate(100%) invert(20%) sepia(21%) saturate(732%) hue-rotate(175deg) brightness(93%) contrast(92%);
 }
 
 h1, h2, h3 {

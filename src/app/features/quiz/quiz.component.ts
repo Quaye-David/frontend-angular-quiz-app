@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuizStateService } from '../../core/services/quiz-state.service';
 import { QuizCategory } from '../../core/models/quiz.model';
-
 @Component({
   selector: 'app-quiz',
   standalone: true,
@@ -18,6 +17,8 @@ export class QuizComponent implements OnInit {
   selectedAnswer = '';
   isAnswerSubmitted = false;
   errorMessage = "";
+  correctIcon = '';
+  wrongIcon = '';
   constructor(private readonly quizStateService: QuizStateService) {}
 
   ngOnInit() {
@@ -25,6 +26,7 @@ export class QuizComponent implements OnInit {
     this.currentQuiz = state.currentCategory as QuizCategory;
     this.currentQuestionIndex = state.currentQuestionIndex;
     this.totalQuestions = state.totalQuestions;
+    
   }
 
   getProgress(): number {

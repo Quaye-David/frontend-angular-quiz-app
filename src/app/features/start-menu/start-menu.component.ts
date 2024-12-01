@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { QuizDataService } from '../../core/services/quiz-data.service';
 import { QuizStateService } from '../../core/services/quiz-state.service';
 import { QuizCategory } from '../../core/models/quiz.model';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-start-menu',
@@ -20,12 +20,7 @@ export class StartMenuComponent implements OnInit {
   constructor(
     private readonly quizDataService: QuizDataService,
     private readonly quizStateService: QuizStateService,
-    private readonly sanitizer: DomSanitizer
   ) {}
-
-  getSafeIcon(iconContent: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(iconContent);
-  }
 
   async ngOnInit() {
     try {

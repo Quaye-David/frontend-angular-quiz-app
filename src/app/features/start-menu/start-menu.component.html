@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <div class="menu-container">
       <section class="welcome-section">
-        <h1 class="title">Welcome to our Quiz App</h1>
+        <h1 class="title">Welcome to the <br><span class="main-title">Frontend Quiz!</span></h1>
         <p class="subtitle">Select a quiz to start your journey</p>
       </section>
 
@@ -16,9 +16,8 @@
             <div class="quiz-items">
               @for (quiz of quizCategories; track quiz.title) {
                 <button class="quiz-item" (click)="selectQuiz(quiz)">
-                  <span class="quiz-icon"
-                        [innerHTML]="getSafeIcon(quiz.icon)"
-                        [style.background-color]="getIconBackground(quiz.title)">
+                  <span class="quiz-icon" [style.background-color]="getIconBackground(quiz.title)">
+                    <img [src]="quiz.icon" [alt]="quiz.title + ' icon'">
                   </span>
                   <span class="quiz-title">{{ quiz.title }}</span>
                 </button>
