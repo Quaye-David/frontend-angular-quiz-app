@@ -13,6 +13,8 @@ export enum ViewState {
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class QuizStateService {
   private readonly STORAGE_KEY = 'quiz-state';
   private readonly VIEW_STATE_KEY = 'view_state';
