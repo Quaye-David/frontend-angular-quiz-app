@@ -23,11 +23,11 @@ import { Subscription } from 'rxjs';
         }
       </div>
       <div class="theme-toggle" [class.dark]="isDarkTheme">
-        <img src="assets/images/icon-sun.svg" class="theme-icon" alt="light theme" />
+        <img src="assets/sunny.svg" class="theme-icon" alt="light theme" />
         <button class="toggle-button" (click)="toggleTheme()">
           <span class="toggle-slider"></span>
         </button>
-        <img src="assets/images/icon-moon.svg" class="theme-icon" alt="dark theme" />
+        <img src="assets/moon.svg" class="theme-icon" alt="dark theme" />
       </div>
     </header>
   `,
