@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { QuizCategory, QuizQuestion } from '../models/quiz.model';
 import { QuizError, QuizErrorHandler } from '../../utils/error-handler';
 
-// quiz-data.service.ts
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class QuizDataService {
   private quizData: QuizCategory[] = [];
   private readonly REQUIRED_FIELDS = ['title', 'icon', 'questions'] as const;
@@ -30,6 +31,7 @@ export class QuizDataService {
     return response.json();
   }
 
+  // Validate the data
   private validateData(data: any): void {
     if (!data?.quizzes?.length) {
       throw new QuizError('Invalid quiz data structure', 'VALIDATION');
@@ -41,6 +43,7 @@ export class QuizDataService {
     });
   }
 
+// Validate the fields
   private validateFields(category: QuizCategory, index: number): void {
     this.REQUIRED_FIELDS.forEach(field => {
       if (!category[field]) {
@@ -49,6 +52,7 @@ export class QuizDataService {
     });
   }
 
+  //Validate the questions
   private validateQuestions(questions: QuizQuestion[], categoryTitle: string): void {
     questions.forEach((question, index) => {
       if (!this.isValidQuestion(question)) {
@@ -60,6 +64,7 @@ export class QuizDataService {
     });
   }
 
+  //Check if the question is valid
   private isValidQuestion(question: QuizQuestion): boolean {
     return Boolean(
       question.question?.trim() &&
@@ -70,6 +75,7 @@ export class QuizDataService {
     );
   }
 
+  //Get the category by name
   getCategoryByName(title: string): QuizCategory | undefined {
     return this.quizData.find(category => category.title === title);
   }
