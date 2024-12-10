@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { QuizCategory, QuizQuestion } from '../models/quiz.model';
 import { QuizError, QuizErrorHandler } from '../../utils/error-handler';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +13,11 @@ export class QuizDataService {
   private quizData: QuizCategory[] = [];
   private readonly REQUIRED_FIELDS = ['title', 'icon', 'questions'] as const;
 
-  async loadQuizData(): Promise<QuizCategory[]> {
+  constructor(private readonly http: HttpClient) {}
+
+  public async loadQuizData(): Promise<QuizCategory[]> {
     try {
-      const data = await this.fetchData();
+      const data = await lastValueFrom(this.http.get<any>('data.json'));
       this.validateData(data);
       this.quizData = data.quizzes;
       return this.quizData;
@@ -23,15 +27,6 @@ export class QuizDataService {
     }
   }
 
-  private async fetchData(): Promise<any> {
-    const response = await fetch('data.json');
-    if (!response.ok) {
-      throw new QuizError(`Failed to fetch quiz data. Status: ${response.status}`, 'DATA_LOAD');
-    }
-    return response.json();
-  }
-
-  // Validate the data
   private validateData(data: any): void {
     if (!data?.quizzes?.length) {
       throw new QuizError('Invalid quiz data structure', 'VALIDATION');
